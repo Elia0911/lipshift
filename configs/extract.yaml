@@ -1,0 +1,28 @@
+# Upstream code (cloned, not vendored) and checkpoints used for feature extraction.
+repos:
+  auto_avsr:
+    url: https://github.com/mpc001/auto_avsr
+    commit: 182b62837773ab01052d4ac21ef1d2203ea7d267
+  vsr_multilingual:
+    url: https://github.com/mpc001/Visual_Speech_Recognition_for_Multiple_Languages
+    commit: 5e1405db0ae816509fb312f9a578724c2e0de0c7
+
+face_model:
+  # BlazeFace short range, official MediaPipe model bucket
+  url: https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite
+
+encoders:
+  autoavsr_en:            # core detector encoder
+    family: auto_avsr
+    checkpoint: vsr_trlrs2lrs3vox2avsp_base.pth
+    md5_prefix: 49f77     # from the Auto-AVSR model zoo table
+  ml_en:                  # Study A
+    family: multilingual
+    archive: LRS3_V_WER32.3.zip
+  ml_es:                  # Study A
+    family: multilingual
+    archive: CMUMOSEAS_V_ES_WER44.5.zip
+
+video:
+  target_fps: 25
+  max_frames: 300         # 12 s at 25 fps

@@ -1,0 +1,7 @@
+# Stratified subset of MAVOS-DD for feature extraction.
+# per_cell is a placeholder until the full counts table (mavos_counts.csv) is reviewed.
+seed: 0
+per_cell: 50
+languages: [english, spanish]   # extend after reviewing counts
+splits: null                    # null keeps every split, including open-set rows
+cell_columns: [language, generative_method, label, split]
