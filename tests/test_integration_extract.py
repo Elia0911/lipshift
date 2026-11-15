@@ -42,3 +42,23 @@ def test_auto_avsr_pipeline_on_face_clip(face_clip: Path) -> None:
     assert feats.shape == (50, 768)  # 60 frames at 30 fps -> 50 at 25 fps
     assert np.isfinite(feats).all()
     assert info["n_frames_25fps"] == 50
+
+
+def test_batch_with_real_encoder(face_clip: Path, tmp_path: Path) -> None:
+    from lipshift.extract.batch import EncoderSpec, run_batch
+    from lipshift.extract.encoders import AutoAVSREncoder
+    from lipshift.extract.pipeline import prepare_clip
+    from lipshift.extract.runner import feature_filename
+
+    spec = EncoderSpec("autoavsr_en", AutoAVSREncoder(AUTO_AVSR))
+    rows = [{"video_path": "english/real/astro30.mp4", "language": "english"}]
+    counts = run_batch(
+        rows,
+        resolve=lambda vp: str(face_clip),
+        prepare=lambda p: prepare_clip(p, AUTO_AVSR, FACE_MODEL),
+        encoders=[spec],
+        out_root=tmp_path,
+    )
+    assert counts["done"] == 1
+    feats = np.load(tmp_path / "autoavsr_en" / feature_filename(rows[0]["video_path"]))
+    assert feats.shape == (50, 768) and np.isfinite(feats).all()
